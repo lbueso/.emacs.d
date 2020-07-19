@@ -16,4 +16,4 @@
  (expand-file-name "conf/programming.org" user-emacs-directory))
 
 (org-babel-load-file
- (expand-file-name "conf/mail/mu4e.org"))
+ (expand-file-name "conf/mail/mu4e.org" user-emacs-directory))
