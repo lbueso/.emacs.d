@@ -1,0 +1,89 @@
+* programming
+
+  This file contains settings related to programming modes.
+
+** lsp
+
+   [[https://emacs-lsp.github.io/lsp-mode][emacs-lsp]] is a client for Language Server Protocol.
+
+   #+begin_src emacs-lisp
+     (use-package lsp-mode :ensure t)
+
+   #+end_src
+
+** Haskell
+
+   #+begin_src emacs-lisp
+     (use-package lsp-haskell :ensure t)
+
+     (add-hook 'haskell-mode-hook #'lsp)
+
+     (setq lsp-haskell-process-path-hie "haskell-language-server-wrapper")
+     (setq lsp-haskell-set-hlint t)
+     (setq lsp-haskell-set-liquid t)
+     (setq lsp-haskell-set-completion-snippets t)
+   #+end_src
+
+** AucTeX
+
+   [[https://www.gnu.org/software/auctex/][AUCTeX]] is an extensible package for writing and formatting TeX.
+
+   #+begin_src emacs-lisp
+     (use-package tex
+       :ensure auctex
+       :mode ("\\.tex\\'" . TeX-latex-mode))
+   #+end_src
+
+   enable ~-shell-escape~ flag
+
+   #+begin_src emacs-lisp
+  (setq TeX-command-extra-options "-shell-escape")
+   #+end_src
+
+   setup company backends
+
+   #+begin_src emacs-lisp
+     (defun my-latex-mode-setup ()
+       (setq-local company-backends
+                   (append '((company-reftex-labels
+                              company-reftex-citations
+                              company-math-symbols-latex
+                              company-math-symbols-unicode
+                              company-auctex-macros
+                              company-auctex-environments))
+                           company-backends)))
+   #+end_src
+
+   #+begin_src emacs-lisp
+     (add-hook 'LaTeX-mode-hook 'my-latex-mode-setup)
+     (add-hook 'LaTeX-mode-hook 'reftex-mode)
+     (add-hook 'LaTeX-mode-hook 'turn-on-auto-fill)
+
+     (setq reftex-plug-into-AUCTeX t)
+
+     (use-package flyspell
+       :init   (add-hook 'LaTeX-mode-hook 'flyspell-mode))
+
+     (setq-default ispell-program-name "aspell")
+
+
+   #+end_src
+
+** nix
+
+   #+begin_src emacs-lisp
+     (use-package nix-mode :ensure t)
+     (use-package nix-update :ensure t)
+     (use-package nix-buffer :ensure t)
+
+     (use-package nixos-options :ensure t)
+     (use-package nixpkgs-fmt :ensure t)
+   #+end_src
+
+** prolog
+
+   prolog-mode default mode for ~.pl~ files
+
+   #+begin_src emacs-lisp
+   (add-to-list 'auto-mode-alist '("\\.pl\\'" . prolog-mode))
+   #+end_src

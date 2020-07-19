@@ -1,0 +1,167 @@
+* theme
+
+** general settings
+
+   hide all bars:
+
+   #+begin_src emacs-lisp
+(tool-bar-mode -1)
+(scroll-bar-mode -1)
+(menu-bar-mode -1)
+
+   #+end_src
+
+   highlight the line of the cursor:
+
+   #+begin_src emacs-lisp
+     (global-hl-line-mode t)
+   #+end_src
+
+   highlight parenthesis:
+
+   #+begin_src emacs-lisp
+   (show-paren-mode t)
+   #+end_src
+
+** theme settings
+
+   This configuration is currently using kaolin themes and
+   doom-modeline.
+
+   #+begin_src emacs-lisp
+     (use-package all-the-icons :ensure t)
+     (use-package kaolin-themes :ensure t)
+     (load-theme 'kaolin-galaxy)
+   #+end_src
+
+   enable different font style inside kaolin:
+
+   #+begin_src emacs-lisp
+     (setq kaolin-themes-bold t       ; If nil, disable the bold style.
+           kaolin-themes-italic t     ; If nil, disable the italic style.
+           kaolin-themes-underline t) ; If nil, disable the underline style.
+   #+end_src
+
+   enable kaolin-treemacs theme:
+
+   #+begin_src emacs-lisp
+      (kaolin-treemacs-theme)
+   #+end_src
+
+   If you want to disable mode-line border, set kaolin-themes-modeline-border to nil
+
+   #+begin_src emacs-lisp
+      (setq kaolin-themes-modeline-border nil)
+   #+end_src
+
+   If you want to use flat underline style instead of wave
+   set kaolin-themes-underline-wave to nil
+
+   #+begin_src emacs-lisp
+      (setq kaolin-themes-underline-wave nil)
+   #+end_src
+
+   If you want to use the same color for comments and metadata keys
+   (e.g. for org-mode tags such as #+TITLE, #+STARTUP and etc)
+   you can disable kaolin-themes-distinct-metakeys.
+
+   #+begin_src emacs-lisp
+   (setq kaolin-themes-distinct-metakeys t)
+
+   #+end_src
+
+   If t, enable italic style in comments.
+
+   #+begin_src emacs-lisp
+   (setq kaolin-themes-italic-comments t)
+   #+end_src
+
+   When t, will display colored hl-line style instead monochrome.
+
+   #+begin_src emacs-lisp
+   (setq kaolin-themes-hl-line-colored t)
+   #+end_src
+
+   Enable distinct background for fringe and line numbers.
+
+   #+begin_src emacs-lisp
+   (setq kaolin-themes-distinct-fringe t)
+   #+end_src
+
+   Enable distinct colors for company popup scrollbar.
+
+   #+begin_src emacs-lisp
+   (setq kaolin-themes-distinct-company-scrollbar t)
+   #+end_src
+
+   Show git-gutter indicators as solid lines
+
+   #+begin_src emacs-lisp
+   (setq kaolin-themes-git-gutter-solid t)
+   #+end_src
+
+*** modeline
+
+    the modeline is bottom bar where the mode and the current buffer
+    information is showed inside emacs.
+
+    #+begin_src emacs-lisp
+    (use-package doom-modeline
+      :ensure t
+      :hook (after-init . doom-modeline-mode)
+      :init (doom-modeline-mode 1))
+    #+end_src
+
+    Whether show `all-the-icons' or not (if nil nothing will be showed).
+
+    #+begin_src emacs-lisp
+    (setq doom-modeline-icon t)
+    #+end_src
+
+    Whether show the icon for major mode. It respects `doom-modeline-icon'.
+
+    #+begin_src emacs-lisp
+    (setq doom-modeline-major-mode-icon t)
+    #+end_src
+
+    Display color icons for `major-mode'. It respects `all-the-icons-color-icons'.
+
+    #+begin_src emacs-lisp
+    (setq doom-modeline-major-mode-color-icon nil)
+    #+end_src
+
+    Whether display minor modes or not. Non-nil to display in mode-line.
+
+    #+begin_src emacs-lisp
+    (setq doom-modeline-minor-modes nil)
+    #+end_src
+
+    Whether display perspective name or not. Non-nil to display in mode-line.
+
+    #+begin_src emacs-lisp
+    (setq doom-modeline-persp-name t)
+    #+end_src
+
+    Whether display `lsp' state or not. Non-nil to display in mode-line.
+
+    #+begin_src emacs-lisp
+    (setq doom-modeline-lsp t)
+    #+end_src
+
+    Whether display github notifications or not. Requires `ghub` package.
+
+    #+begin_src emacs-lisp
+    (setq doom-modeline-github nil)
+    #+end_src
+
+    The interval of checking github.
+
+    #+begin_src emacs-lisp
+    (setq doom-modeline-github-interval (* 30 60))
+    #+end_src
+
+    Whether display environment version or not.
+
+    #+begin_src emacs-lisp
+    (setq doom-modeline-version t)
+    #+end_src

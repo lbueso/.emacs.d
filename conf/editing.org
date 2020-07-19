@@ -1,0 +1,58 @@
+* editing
+
+  This file contains tools and configuration related to editing text.
+
+** company-settings
+
+   [[https://company-mode.github.io/][company]] is a text completation framework for emacs.
+
+   #+begin_src emacs-lisp
+     (use-package company :ensure t)
+
+     (add-hook 'after-init-hook 'global-company-mode)
+   #+end_src
+
+** flycheck-settings
+
+   [[https://github.com/flycheck/flycheck][flycheck]] is a sintax checking extension for emacs
+
+   #+begin_src emacs-lisp
+     (use-package flycheck :ensure t)
+
+     (global-flycheck-mode)
+   #+end_src
+
+   flycheck checks only when a file is saved:
+
+   #+begin_src emacs-lisp
+     (setq flycheck-check-syntax-automatically '(save mode-enable))
+   #+end_src
+
+** yasnippet-settings
+
+   [[https://github.com/joaotavora/yasnippet][yasnippet]] is a template system for emacs.
+
+   #+begin_src emacs-lisp
+     (use-package yasnippet :ensure t)
+
+     (yas-reload-all)
+
+     (add-hook 'prog-mode-hook #'yas-minor-mode)
+   #+END_SRC
+
+   to install the snippets:
+
+   #+begin_src emacs-lisp
+     (use-package yasnippet-snippets :ensure t)
+   #+end_src
+
+** multiple-cursor-settings
+
+   #+begin_src emacs-lisp
+     (use-package multiple-cursors
+       :ensure t
+       :bind (("C-S-c C-S-c" . mc/edit-lines)
+              ("C-<"         . mc/mark-previous-like-this)
+              ("C->"         . mc/mark-next-like-this)
+              ("C-c C-<"     . mc/mark-all-like-this)))
+   #+end_src

@@ -1,0 +1,181 @@
+* general
+
+  This file contains general settings of emacs like paths, package
+  management.
+
+** path
+
+   directory to search for other modes
+
+   #+begin_src emacs-lisp
+     (add-to-list 'load-path "~/.emacs.d/local/")
+   #+end_src
+
+   save emacs backups in ~.emacs.d/backups~
+
+   #+begin_src emacs-lisp
+   (setq backup-directory-alist '(("." . "~/.emacs.d/backups")))
+   #+end_src
+
+   prevent emacs of modifying ~init.el~ with custom variables
+
+   #+begin_src emacs-lisp
+   (setq custom-file "~/.emacs.d/custom.el")
+   (load custom-file 'noerror)
+   #+end_src
+
+** packages
+
+   adding melpa and gnu package repositories
+
+   #+begin_src emacs-lisp
+     (require 'package)
+     (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
+     (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+   #+end_src
+
+   install use-package if not already installed
+
+   #+begin_src emacs-lisp
+     (unless (package-installed-p 'use-package)
+
+     (package-refresh-contents)
+
+     (package-install 'use-package))
+
+     (eval-when-compile (require 'use-package))
+   #+end_src
+
+** basic functionality
+
+   show cursor position within line
+
+   #+begin_src emacs-lisp
+   (column-number-mode 1)
+   #+end_src
+
+   #+begin_src emacs-lisp
+    (setq ring-bell-function 'ignore)
+   #+end_src
+
+   automatically indent wherever I am
+
+   #+begin_src emacs-lisp
+   (global-set-key (kbd "RET") 'newline-and-indent)
+   #+end_src
+
+   indent Fucking Whole Buffer (by github.com/skgsergio)
+
+   #+begin_src emacs-lisp
+     (defun iwb ()
+       "Indent whole buffer"
+       (interactive)
+       (delete-trailing-whitespace)
+       (indent-region (point-min) (point-max) nil)
+       (untabify (point-min) (point-max))
+       (message "Indent buffer: Done.")
+       )
+
+     (global-set-key "\M-i" 'iwb)
+   #+end_src
+
+   enable autopair in all buffers
+
+   #+begin_src emacs-lisp
+     (use-package autopair
+       :ensure t
+       :config
+       (autopair-global-mode))
+   #+end_src
+
+   opening in terminal settings
+
+   #+begin_src emacs-lisp
+   (set-terminal-coding-system 'utf-8)
+   (set-keyboard-coding-system 'utf-8)
+   (prefer-coding-system 'utf-8)
+   #+end_src
+
+   don't indent with tabs ffs!
+
+   #+begin_src emacs-lisp
+   (setq-default indent-tabs-mode nil)
+   #+end_src
+
+   clean my file pl0x!
+
+   #+begin_src emacs-lisp
+   (add-hook 'before-save-hook 'whitespace-cleanup)
+   #+end_src
+
+   ensure that emacs loads environment variables
+
+   #+begin_src emacs-lisp
+     (use-package exec-path-from-shell
+       :ensure t
+       :init
+       (exec-path-from-shell-initialize))
+   #+end_src
+
+   gpg keys configuration
+
+   #+begin_src emacs-lisp
+     (setenv "GPG_AGENT_INFO" nil)
+
+     (require 'password-cache)
+     (require 'epa-file)
+
+     (epa-file-enable)
+
+     (setq password-cache-expiry (* 15 60))
+     (setq epa-file-cache-passphrase-for-symmetric-encryption t)
+
+     (setq epa-pinentry-mode 'loopback)
+
+   #+end_src
+
+** windows and frames
+
+   #+begin_src emacs-lisp
+    (global-set-key (kbd "M-3") 'split-window-horizontally) ; was digit-argument
+    (global-set-key (kbd "M-2") 'split-window-vertically)   ; was digit-argument
+    (global-set-key (kbd "M-1") 'delete-other-windows)      ; was digit-argument
+    (global-set-key (kbd "M-0") 'delete-window)             ; was digit-argument
+    (global-set-key (kbd "M-o") 'other-window)              ; was facemenu-keymap
+
+    (windmove-default-keybindings)
+   #+end_src
+
+** incremental completion
+
+   In emacs there are multiple frameworks for incremental
+   completions. I am currently using helm.
+
+*** helm
+
+    #+begin_src  emacs-lisp
+      (use-package helm
+        :ensure t
+        :bind (("M-x"     . helm-M-x)
+               ("C-x b"   . helm-buffers-list)
+               ("C-x C-b" . helm-buffers-list)
+               ("C-x C-f" . helm-find-files)
+               ("M-y"     . helm-show-kill-ring)))
+
+    #+end_src
+
+    to avoid that helm uses a different buffer for comletions:
+
+    #+begin_src emacs-lisp
+      (use-package shackle
+        :ensure t
+        :after helm
+        :diminish
+        :config
+        (setq helm-display-function 'pop-to-buffer) ; make helm play nice
+        (setq shackle-rules '(("\\`\\*helm.*?\\*\\'"
+                               :regexp t
+                               :align t
+                               :size 0.4)))
+        (shackle-mode))
+    #+end_src

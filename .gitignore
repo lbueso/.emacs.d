@@ -1,0 +1,21 @@
+# Emacs staff #
+\#*\#
+*~
+.#*
+backups
+recentf
+eshell/history
+ensime/*
+url/cookies
+ido.last
+ac-comphist.dat
+elpa/
+/custom.el
+/network-security.data
+conf/*.el
+/.cache/
+/projectile-bookmarks.eld
+/nix-buffer/
+/.lsp-session-v1
+/transient/
+/.mc-lists.el

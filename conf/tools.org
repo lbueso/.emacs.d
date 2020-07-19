@@ -1,0 +1,287 @@
+* tools
+
+  This file contains the configuration of different tools embedded
+  in emacs.
+
+** magit
+
+   [[https://githum.com/magit/magit][magit]] is an interface to the version control system git.
+
+   #+begin_src emacs-lisp
+     (use-package magit :ensure t :bind ("C-x g" . magit-status))
+   #+end_src
+
+** org
+
+   adding minted support for org mode code blocks:
+
+   #+begin_src emacs-lisp
+     (setq org-latex-listings 'minted
+           org-latex-packages-alist '(("" "minted"))
+           org-latex-pdf-process
+           '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+             "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+   #+end_src
+
+   loading some languages that can be evalueted in org-babel:
+
+   #+begin_src emacs-lisp
+     (org-babel-do-load-languages
+      'org-babel-load-languages
+      '((latex . t)
+        (lilypond . t)))
+   #+end_src
+
+   org-mime allows to send HTML email using org-mode.
+
+   #+begin_src emacs-lisp
+     (use-package org-mime :ensure t)
+   #+end_src
+
+   this defines some custom latex-class for org export
+
+   #+begin_src emacs-lisp
+     (add-to-list 'org-latex-classes
+                  '("thesis"
+                    "\\documentclass{book}"
+                    ("\\chapter{%s}" . "\\chapter*{%s}")
+                    ("\\section{%s}" . "\\section*{%s}")
+                    ("\\subsection{%s}" . "\\subsection*{%s}")
+                    ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
+                  )
+   #+end_src
+
+*** look and feel
+
+    collapse src by default:
+
+    #+begin_src emacs-lisp
+     (add-hook 'org-mode-hook 'org-hide-block-all)
+    #+end_src
+
+    org-bullets configuration
+
+    #+begin_src emacs-lisp
+     (use-package org-bullets
+       :ensure t
+       :config
+       (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+    #+end_src
+
+    this setting enables unicode symbols in org mode like \lambda or \in.
+
+    #+begin_src emacs-lisp
+      (setq org-latex-create-formula-image-program 'dvipng)
+      (setq org-pretty-entities t)
+    #+end_src
+
+    enable syntax highlighting in code blocks inside org.
+
+    #+begin_src emacs-lisp
+    (setq org-src-fontify-natively t)
+    (setq org-fontify-whole-heading-line t
+            org-fontify-done-headline t
+            org-fontify-quote-and-verse-blocks t)
+    #+end_src
+
+** vterm
+
+   this term needs ~libvterm~.
+
+   #+begin_src emacs-lisp
+   (use-package vterm :ensure t)
+   #+end_src
+
+** elfeed
+
+   [[https://github.com/skeeto/elfeed][elfeed]] is an emacs rss feed. This configuration loads an org file
+   with the urls of the feeds. It also is configured to support
+   youtube content. In order to use the youtube functionality a proper
+   installation of ~mpv~ and ~youtube-dl~ is required.
+
+   #+begin_src emacs-lisp
+     (use-package elfeed :ensure t)
+
+     (use-package elfeed-org
+       :ensure t
+       :config
+       (elfeed-org)
+       (setq rmh-elfeed-org-files (list "~/Documents/feed.org")))
+   #+end_src
+
+*** youtube support
+
+    YouTube provides RSS feeds for each of its channels. Here I define
+    some useful functions to interact with youtube feeds in elfeed.
+
+    #+begin_src emacs-lisp
+      (defun play-youtube-video (message)
+        (start-process "mpv" "youtube" "mpv" message))
+
+      (defun elfeed-play-youtube-video ()
+        (interactive)
+        (let ((entry (elfeed-search-selected :single)))
+          (play-youtube-video (elfeed-entry-link entry))))
+
+      (define-key elfeed-search-mode-map "v" #'elfeed-play-youtube-video)
+    #+end_src
+
+** projectile
+
+   [[https://github.com/bbatsov/projectile][projectile]] is a project interaction library for emacs.
+
+   #+begin_src emacs-lisp
+     (use-package projectile
+       :ensure t
+       :config
+       (projectile-mode +1)
+       (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+       )
+
+     (use-package helm-projectile
+       :ensure t
+       :config
+       (require 'helm-projectile)
+       (helm-projectile-on)
+       )
+   #+end_src
+
+** treemacs
+
+   [[https://github.com/Alexander-Miller/treemacs][treemacs]] is a tree layout file explorer. This configuration uses
+   some extensions to integrate it with projectile and magit.
+
+   #+begin_src emacs-lisp
+     (use-package treemacs
+       :ensure t
+       :defer t
+       :init
+       (with-eval-after-load 'winum
+         (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+       :config
+       (progn
+         (setq treemacs-collapse-dirs                 (if treemacs-python-executable 3 0)
+               treemacs-deferred-git-apply-delay      0.5
+               treemacs-directory-name-transformer    #'identity
+               treemacs-display-in-side-window        t
+               treemacs-eldoc-display                 t
+               treemacs-file-event-delay              5000
+               treemacs-file-extension-regex          treemacs-last-period-regex-value
+               treemacs-file-follow-delay             0.2
+               treemacs-file-name-transformer         #'identity
+               treemacs-follow-after-init             t
+               treemacs-git-command-pipe              ""
+               treemacs-goto-tag-strategy             'refetch-index
+               treemacs-indentation                   2
+               treemacs-indentation-string            " "
+               treemacs-is-never-other-window         nil
+               treemacs-max-git-entries               5000
+               treemacs-missing-project-action        'ask
+               treemacs-move-forward-on-expand        nil
+               treemacs-no-png-images                 nil
+               treemacs-no-delete-other-windows       t
+               treemacs-project-follow-cleanup        nil
+               treemacs-persist-file                  (expand-file-name ".cache/treemacs-persist" user-emacs-directory)
+               treemacs-position                      'left
+               treemacs-recenter-distance             0.1
+               treemacs-recenter-after-file-follow    nil
+               treemacs-recenter-after-tag-follow     nil
+               treemacs-recenter-after-project-jump   'always
+               treemacs-recenter-after-project-expand 'on-distance
+               treemacs-show-cursor                   nil
+               treemacs-show-hidden-files             t
+               treemacs-silent-filewatch              nil
+               treemacs-silent-refresh                nil
+               treemacs-sorting                       'alphabetic-asc
+               treemacs-space-between-root-nodes      t
+               treemacs-tag-follow-cleanup            t
+               treemacs-tag-follow-delay              1.5
+               treemacs-user-mode-line-format         nil
+               treemacs-user-header-line-format       nil
+               treemacs-width                         35
+               treemacs-workspace-switch-cleanup      nil)
+
+         ;; The default width and height of the icons is 22 pixels. If you are
+         ;; using a Hi-DPI display, uncomment this to double the icon size.
+         ;;(treemacs-resize-icons 44)
+
+         (treemacs-follow-mode t)
+         (treemacs-filewatch-mode t)
+         (treemacs-fringe-indicator-mode t)
+         (pcase (cons (not (null (executable-find "git")))
+                      (not (null treemacs-python-executable)))
+           (`(t . t)
+            (treemacs-git-mode 'deferred))
+           (`(t . _)
+            (treemacs-git-mode 'simple))))
+       :bind
+       (:map global-map
+             ("M-0"       . treemacs-select-window)
+             ("C-x t 1"   . treemacs-delete-other-windows)
+             ("C-x t t"   . treemacs)
+             ("C-x t B"   . treemacs-bookmark)
+             ("C-x t C-t" . treemacs-find-file)
+             ("C-x t M-t" . treemacs-find-tag)))
+   #+end_src
+
+   #+begin_src emacs-lisp
+     (use-package treemacs-projectile
+       :after treemacs projectile
+       :ensure t)
+
+     (setq treemacs-add-and-display-current-project t)
+   #+end_src
+
+   #+begin_src emacs-lisp
+     (use-package treemacs-icons-dired
+       :after treemacs dired
+       :ensure t
+       :config (treemacs-icons-dired-mode))
+   #+end_src
+
+   #+begin_src emacs-lisp
+     (use-package treemacs-magit
+       :after treemacs magit
+       :ensure t)
+   #+end_src
+
+   #+begin_src emacs-lisp
+     (use-package treemacs-persp
+       :after treemacs persp-mode
+       :ensure t
+       :config (treemacs-set-scope-type 'Perspectives))
+   #+end_src
+
+** telega
+
+   [[https://github.com/zevlg/telega.el][telega]] is a telegram client.
+
+   #+begin_src emacs-lisp
+     (use-package telega
+       :ensure t
+       :config
+
+       (setq telega-inserter-for-chat-button 'telega-ins--chat-full-2lines)
+       (setq telega-chat-button-width 40)
+       (setq telega-root-fill-column (+ 20 telega-chat-button-width))
+       (put (get 'telega-chat 'button-category-symbol)
+            :inserter 'telega-ins--chat-full-2lines)
+       (setq switch-to-buffer-preserve-window-point t)
+       (setq telega-chat--display-buffer-action
+             '((display-buffer-reuse-window display-buffer-use-some-window)))
+
+       (defun lg-telega-root-mode ()
+         (hl-line-mode 1))
+
+       (defun lg-telega-chat-update (chat)
+         (with-telega-root-buffer
+          (hl-line-highlight)))
+
+       (add-hook 'telega-chat-update-hook 'lg-telega-chat-update)
+       (add-hook 'telega-root-mode-hook 'lg-telega-root-mode)
+
+       (setq telega-chat-show-avatars t)
+       (setq telega-root-show-avatars t)
+       (setq telega-use-images t)
+       )
+   #+end_src
