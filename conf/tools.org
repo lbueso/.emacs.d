@@ -13,14 +13,18 @@
 
 ** org
 
+   custom pdf export command to support references and minted:
+
+   #+begin_src emacs-lisp
+     (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
+   #+end_src
+
    adding minted support for org mode code blocks:
 
    #+begin_src emacs-lisp
      (setq org-latex-listings 'minted
-           org-latex-packages-alist '(("" "minted"))
-           org-latex-pdf-process
-           '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
-             "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+           org-latex-packages-alist '(("" "minted")))
+
    #+end_src
 
    loading some languages that can be evalueted in org-babel:
@@ -49,6 +53,13 @@
                     ("\\subsection{%s}" . "\\subsection*{%s}")
                     ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))
                   )
+   #+end_src
+
+   adding ~org-ref~, an org extension that makes easier to handle
+   biblography and references:
+
+   #+begin_src emacs-lisp
+     (use-package org-ref :ensure t)
    #+end_src
 
 *** look and feel

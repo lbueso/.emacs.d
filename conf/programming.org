@@ -34,10 +34,22 @@
        :mode ("\\.tex\\'" . TeX-latex-mode))
    #+end_src
 
-   enable ~-shell-escape~ flag
+   enable ~-shell-escape~ flag and biblography options
 
    #+begin_src emacs-lisp
-  (setq TeX-command-extra-options "-shell-escape")
+     (setq TeX-command-extra-options "-shell-escape")
+     (setq org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
+
+   #+end_src
+
+   this makes ~zathura~ the default pdf viewer in org-mode
+
+   #+begin_src emacs-lisp
+     (setq org-file-apps
+       '((auto-mode . emacs)
+       ("\\.pdf::\\([0-9]+\\)?\\'" . "zathura %s -P %1")
+       ("\\.pdf\\'" . "zathura %s")
+       (directory . emacs)))
    #+end_src
 
    setup company backends
