@@ -31,7 +31,7 @@
    #+begin_src emacs-lisp
      (use-package all-the-icons :ensure t)
      (use-package kaolin-themes :ensure t)
-     (load-theme 'doom-one-light)
+     (load-theme 'doom-one)
    #+end_src
 
    enable different font style inside kaolin:
@@ -45,7 +45,7 @@
    enable kaolin-treemacs theme:
 
    #+begin_src emacs-lisp
-      (kaolin-treemacs-theme)
+     (kaolin-treemacs-theme)
    #+end_src
 
    If you want to disable mode-line border, set kaolin-themes-modeline-border to nil

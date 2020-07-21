@@ -42,16 +42,6 @@
 
    #+end_src
 
-   this makes ~zathura~ the default pdf viewer in org-mode
-
-   #+begin_src emacs-lisp
-     (setq org-file-apps
-       '((auto-mode . emacs)
-       ("\\.pdf::\\([0-9]+\\)?\\'" . "zathura %s -P %1")
-       ("\\.pdf\\'" . "zathura %s")
-       (directory . emacs)))
-   #+end_src
-
    setup company backends
 
    #+begin_src emacs-lisp

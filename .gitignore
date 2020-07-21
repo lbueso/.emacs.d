@@ -19,3 +19,4 @@ conf/*.el
 /.lsp-session-v1
 /transient/
 /.mc-lists.el
+/url/

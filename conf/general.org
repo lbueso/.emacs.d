@@ -134,6 +134,12 @@
 
    #+end_src
 
+   disabling emacs locks
+
+   #+begin_src emacs-lisp
+     (setq create-lockfiles nil)
+   #+end_src
+
 ** windows and frames
 
    #+begin_src emacs-lisp
