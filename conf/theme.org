@@ -31,7 +31,7 @@
    #+begin_src emacs-lisp
      (use-package all-the-icons :ensure t)
      (use-package kaolin-themes :ensure t)
-     (load-theme 'kaolin-galaxy)
+     (load-theme 'doom-one-light)
    #+end_src
 
    enable different font style inside kaolin:
