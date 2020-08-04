@@ -140,6 +140,22 @@
      (setq create-lockfiles nil)
    #+end_src
 
+   function to launch terminal in file path
+
+   #+begin_src emacs-lisp
+     (exec-path-from-shell-copy-env "TERMINAL")
+
+     (defun launch-terminal-in-file-path ()
+         (interactive)
+         (start-process
+          "terminal"                         ; name
+          "terminal"                         ; buffer name
+          (getenv "TERMINAL")
+          "-cd" (file-name-directory buffer-file-name)))
+
+     (global-set-key (kbd "C-x C-t") 'launch-terminal-in-file-path)
+   #+end_src
+
 ** windows and frames
 
    #+begin_src emacs-lisp
