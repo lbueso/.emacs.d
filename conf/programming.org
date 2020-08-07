@@ -89,3 +89,9 @@
    #+begin_src emacs-lisp
    (add-to-list 'auto-mode-alist '("\\.pl\\'" . prolog-mode))
    #+end_src
+
+** Sophia
+
+   #+begin_src emacs-lisp
+     (require 'sophia-mode)
+   #+end_src

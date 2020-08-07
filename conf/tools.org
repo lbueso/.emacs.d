@@ -73,6 +73,37 @@
        (directory . emacs)))
    #+end_src
 
+   enabling flyspell in org mode
+
+   #+begin_src emacs-lisp
+     (add-hook 'org-mode-hook 'turn-on-flyspell)
+
+   #+end_src
+
+*** org-msg
+
+    [[https://github.com/jeremy-compostella/org-msg][org-msg]] is a global minor mode to write messages using org.
+
+    #+begin_src emacs-lisp
+      (use-package org-msg :ensure t)
+
+      (org-msg-mode)
+
+      (setq org-msg-options "html-postamble:nil H:5 num:nil ^:{} toc:nil author:nil email:nil \\n:t")
+      (setq org-msg-startup "hidestars indent inlineimages")
+      (setq org-msg-greeting-fmt "\nHi *%s*,\n\n")
+      (setq org-msg-greeting-name-limit 3)
+      (setq org-msg-text-plain-alternative t)
+
+
+    #+end_src
+
+
+    #+begin_src emacs-lisp
+      (setq mail-user-agent 'mu4e-user-agent)
+    #+end_src
+
+
 
 *** look and feel
 
@@ -307,4 +338,10 @@
        (setq telega-root-show-avatars t)
        (setq telega-use-images t)
        )
+   #+end_src
+
+** tramp
+
+   #+begin_src emacs-lisp
+     (require 'tramp)
    #+end_src

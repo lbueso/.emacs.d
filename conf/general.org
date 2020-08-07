@@ -185,3 +185,11 @@
                                :size 0.4)))
         (shackle-mode))
     #+end_src
+
+    helm-dictionary utility
+
+    #+begin_src emacs-lisp
+      (use-package helm-dictionary :ensure t)
+      (require 'helm-dictionary)
+      (setq helm-dictionary-database "http://wiktionary-export.nataraj.su/en/")
+    #+end_src
