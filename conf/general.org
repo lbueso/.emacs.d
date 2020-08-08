@@ -156,6 +156,27 @@
      (global-set-key (kbd "C-x C-t") 'launch-terminal-in-file-path)
    #+end_src
 
+   function to launch a file manager in file path (now only working
+   with terminal-based file managers)
+
+   #+begin_src emacs-lisp
+     (exec-path-from-shell-copy-env "TERMINAL")
+     (exec-path-from-shell-copy-env "FILE_MANAGER")
+     (exec-path-from-shell-copy-env "EDITOR")
+
+     (defun launch-file-manager-in-file-path ()
+         (interactive)
+         (start-process
+          "file-manager"                         ; name
+          "file-manager"                         ; buffer name
+          (getenv "TERMINAL")
+          "-cd" (file-name-directory buffer-file-name)
+          "-e"  (getenv "FILE_MANAGER")))
+
+     (global-set-key (kbd "C-x C-r") 'launch-file-manager-in-file-path)
+   #+end_src
+
+
 ** windows and frames
 
    #+begin_src emacs-lisp
