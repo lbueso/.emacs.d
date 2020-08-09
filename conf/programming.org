@@ -7,21 +7,33 @@
    [[https://emacs-lsp.github.io/lsp-mode][emacs-lsp]] is a client for Language Server Protocol.
 
    #+begin_src emacs-lisp
-     (use-package lsp-mode :ensure t)
+     (use-package lsp-mode
+       :ensure t
+       :hook (haskell-mode . lsp)
+       :commands lsp)
+
+     (use-package lsp-ui
+       :ensure t
+       :commands lsp-ui-mode)
 
    #+end_src
 
 ** Haskell
 
    #+begin_src emacs-lisp
-     (use-package lsp-haskell :ensure t)
+     (use-package lsp-haskell
+       :ensure t
+       :config
+       (setq lsp-haskell-process-path-hie "ghcide")
+       (setq lsp-haskell-process-args-hie '())
+       )
 
      (add-hook 'haskell-mode-hook #'lsp)
 
-     (setq lsp-haskell-process-path-hie "haskell-language-server-wrapper")
-     (setq lsp-haskell-set-hlint t)
-     (setq lsp-haskell-set-liquid t)
-     (setq lsp-haskell-set-completion-snippets t)
+     (use-package eglot
+       :ensure t
+       :config
+       (add-to-list 'eglot-server-programs '(haskell-mode . ("ghcide" "--lsp"))))
    #+end_src
 
 ** AucTeX
@@ -71,15 +83,39 @@
 
    #+end_src
 
-** nix
+** nix and nixOS
+
+   configuration for the nix language
 
    #+begin_src emacs-lisp
      (use-package nix-mode :ensure t)
      (use-package nix-update :ensure t)
      (use-package nix-buffer :ensure t)
+   #+end_src
 
-     (use-package nixos-options :ensure t)
+   flycheck configuration
+
+   #+begin_src emacs-lisp
+     (setq flycheck-command-wrapper-function
+           (lambda (command) (apply 'nix-shell-command (nix-current-sandbox) command))
+           flycheck-executable-find
+           (lambda (cmd) (nix-executable-find (nix-current-sandbox) cmd)))
+   #+end_src
+
+   some other utilities for nix
+
+   #+begin_src emacs-lisp
      (use-package nixpkgs-fmt :ensure t)
+     (use-package nix-sandbox :ensure t)
+   #+end_src
+
+   configuration to edit nixOS configuration files
+
+   #+begin_src emacs-lisp
+     (use-package helm-nixos-options :ensure t)
+     (use-package nixos-options :ensure t)
+     (use-package company-nixos-options :ensure t)
+     (add-to-list 'company-backends 'company-nixos-options)
    #+end_src
 
 ** prolog
@@ -93,5 +129,14 @@
 ** Sophia
 
    #+begin_src emacs-lisp
-     (require 'sophia-mode)
+     ;; (require 'sophia-mode)
+   #+end_src
+
+** Erlang
+
+** format all
+
+   #+begin_src emacs-lisp
+     (use-package format-all :ensure t)
+     (format-all-mode)
    #+end_src

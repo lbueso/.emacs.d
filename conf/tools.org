@@ -345,3 +345,9 @@
    #+begin_src emacs-lisp
      (require 'tramp)
    #+end_src
+** direnv
+
+   #+begin_src emacs-lisp
+     (use-package direnv :ensure t)
+     (direnv-mode)
+   #+end_src
