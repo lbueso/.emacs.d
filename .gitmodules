@@ -1,0 +1,6 @@
+[submodule "emacs-mail"]
+	path = emacs-mail
+	url = git@git.lbueso.com:/srv/git/configs/emacs-mail.git
+[submodule "mail"]
+	path = mail
+	url = git@git.lbueso.com:/srv/git/configs/emacs-mail.git
