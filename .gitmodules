@@ -1,0 +1,3 @@
+[submodule "conf/mail"]
+	path = conf/mail
+	url = git@git.lbueso.com:/srv/git/configs/emacs-mail.git
